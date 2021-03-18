@@ -20,6 +20,7 @@ const type_graphql_1 = require("type-graphql");
 const hello_1 = require("./resolvers/hello");
 const post_1 = require("./resolvers/post");
 const user_1 = require("./resolvers/user");
+const cors_1 = __importDefault(require("cors"));
 const redis = require("redis");
 const session = require("express-session");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,6 +29,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const app = express_1.default();
     const RedisStore = require("connect-redis")(session);
     const redisClient = redis.createClient();
+    app.use(cors_1.default({
+        origin: "http://localhost:3000",
+        credentials: true,
+    }));
     app.use(session({
         name: "qid",
         store: new RedisStore({
@@ -51,7 +56,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }),
         context: ({ req, res }) => ({ em: orm.em, req, res }),
     });
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({
+        app,
+        cors: false,
+    });
     app.listen(4000, () => {
         console.log("Servidor encendido en localhost:4000");
     });
