@@ -8,6 +8,7 @@ import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import cors from "cors";
+import { sendEmail } from "./utils/sendEmail";
 
 const redis = require("redis");
 const session = require("express-session");
